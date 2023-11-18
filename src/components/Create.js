@@ -6,12 +6,21 @@ import { ethers } from 'ethers'
 
 const Create = ({ provider, dao, setIsLoading }) => {
   const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
   const [amount, setAmount] = useState(0)
   const [address, setAddress] = useState('')
   const [isWaiting, setIsWaiting] = useState(false)
+  const [error, setError] = useState('')
 
   const createHandler = async (e) => {
     e.preventDefault()
+
+    // Checks if description is empty
+    if (!description.trim()) {
+        setError('Please enter a proposal description.');
+        return;
+      }
+    setError('')
     setIsWaiting(true)
 
     try {
@@ -37,6 +46,13 @@ const Create = ({ provider, dao, setIsLoading }) => {
           onChange={(e) => setName(e.target.value)}
         />
         <Form.Control
+          type='text'
+          placeholder='Enter description'
+          className='my-2'
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <Form.Control
           type='number'
           placeholder='Enter amount'
           className='my-2'
@@ -48,6 +64,7 @@ const Create = ({ provider, dao, setIsLoading }) => {
           className='my-2'
           onChange={(e) => setAddress(e.target.value)}
         />
+        {error && <div style={{ color: 'red' }}>{ error }</div>}
         {isWaiting ? (
           <Spinner animation="border" style={{ display: 'block', margin: '0 auto' }} />
         ) : (
