@@ -12,15 +12,17 @@ contract DAO {
     struct Proposal {
         uint256 id;
         string name;
+        string description;
         uint256 amount;
         address payable recipient;
+        uint256 recipientBalance;
         uint256 votes;
         bool finalized;
     }
 
     uint256 public proposalCount;
     mapping(uint256 => Proposal) public proposals;
-
+    mapping(uint256 => uint256) public recipientBalances;
     mapping(address => mapping(uint256 => bool)) votes;
 
     event Propose(
@@ -52,8 +54,10 @@ contract DAO {
     // Create proposal
     function createProposal(
         string memory _name,
+        string memory _description,
         uint256 _amount,
-        address payable _recipient
+        address payable _recipient,
+        uint256 _recipientBalance
     ) external onlyInvestor {
         require(address(this).balance >= _amount);
 
@@ -62,8 +66,10 @@ contract DAO {
         proposals[proposalCount] = Proposal(
             proposalCount,
             _name,
+            _description,
             _amount,
             _recipient,
+            _recipientBalance,
             0,
             false
         );

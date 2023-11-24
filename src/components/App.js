@@ -53,8 +53,16 @@ function App() {
       const proposal = await dao.proposals(i + 1)
       items.push(proposal)
     }
-
     setProposals(items)
+
+    /* Fetch recipient balance
+    const index = await dao.proposalCount()
+    const balances = []
+
+    for(var x = 0; x < index; x++) {
+      const balance = await dao.recipientBalances(x + 1)
+      balance.push(balances)
+    }*/
 
     // Fetch quorum
     setQuorum(await dao.quorum())

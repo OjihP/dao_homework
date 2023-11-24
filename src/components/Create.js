@@ -20,14 +20,14 @@ const Create = ({ provider, dao, setIsLoading }) => {
         setError('Please enter a proposal description.');
         return;
       }
-    setError('')
+    
     setIsWaiting(true)
 
     try {
       const signer = await provider.getSigner()
       const formattedAmount = ethers.utils.parseUnits(amount.toString(), 'ether')
 
-      const transaction = await dao.connect(signer).createProposal(name, formattedAmount, address)
+      const transaction = await dao.connect(signer).createProposal(name, description, formattedAmount, address)
       await transaction.wait()
     } catch {
       window.alert('User rejected or transaction reverted')
@@ -49,7 +49,6 @@ const Create = ({ provider, dao, setIsLoading }) => {
           type='text'
           placeholder='Enter description'
           className='my-2'
-          value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
         <Form.Control
